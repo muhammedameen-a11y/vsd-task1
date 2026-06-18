@@ -16,7 +16,8 @@ This repository contains my submission for Task 1 of the VSD RISC-V Embedded Fir
 - GCC compilation workflow
 - Header and source file organization
 
-## Build Command
+## Hardware Validation
 
-```bash
-gcc main.c gpio.c -o firmware_demo
+Firmware was successfully flashed to the VSDSquadron Mini (CH32V003).
+
+An external LED connected to PD4 was blinked using GPIO control and verified on hardware.
