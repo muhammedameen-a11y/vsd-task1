@@ -24,3 +24,9 @@ This project simulates a modular embedded firmware architecture using C.
 - State management
 - Embedded debugging
 - Modular firmware development
+
+  ## Hardware Validation
+
+Firmware was successfully flashed to the VSDSquadron Mini (CH32V003).
+
+An external LED connected to PD4 was blinked using GPIO control and verified on hardware.
