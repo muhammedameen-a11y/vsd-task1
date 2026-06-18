@@ -1,49 +1,25 @@
-#include "gpio.h"
-#include "uart.h"
-#include "board.h"
-#include "delay.h"
+#include "ch32v00x.h"
+#include "debug.h"
 
-void delay()
-{
-    for(long int i = 0; i < 100000000; i++);
-}
+int main(void) {
+    GPIO_InitTypeDef GPIO_InitStructure = {0};
 
-int main()
-{
-    int counter = 0;
+    SystemCoreClockUpdate();
+    Delay_Init();
+    USART_Printf_Init(115200); // <-- add this for serial
 
-    gpio_init(LED_PIN);
-    gpio_init(STATUS_PIN);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
+    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_4;
+    GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
 
-    uart_init();
-
-    uart_write(BOARD_NAME);
-    uart_write(FIRMWARE_VERSION);
-
-    while(1)
-{
-    gpio_toggle(LED_PIN);
-
-    gpio_toggle(STATUS_PIN);
-
-    if(gpio_read(LED_PIN))
-        uart_write("LED_PIN State: HIGH");
-    else
-        uart_write("LED_PIN State: LOW");
-
-    if(gpio_read(STATUS_PIN))
-        uart_write("STATUS_PIN State: HIGH");
-    else
-        uart_write("STATUS_PIN State: LOW");
-
-    uart_write("System Running...");
-
-    uart_write_int(counter);
-
-    counter++;
-
-    delay_ms();
-}
-
-    return 0;
+    while (1) {
+        GPIO_WriteBit(GPIOD, GPIO_Pin_4, Bit_SET);
+        printf("LED ON\r\n");   // <-- prints to serial
+        Delay_Ms(500);
+        GPIO_WriteBit(GPIOD, GPIO_Pin_4, Bit_RESET);
+        printf("LED OFF\r\n");  // <-- prints to serial
+        Delay_Ms(500);
+    }
 }
